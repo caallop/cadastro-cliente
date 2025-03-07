@@ -1,6 +1,6 @@
 console.log("electron processo principal")
 
-const { Menu, shell, nativeTheme } = require('electron')
+const { Menu, shell, nativeTheme } = require('electron/main')
 const { app, BrowserWindow } = require('electron/main')
 // importaçao dos recursos do framekwork
 //app se refere a aplicaçao
@@ -10,17 +10,17 @@ const createWindow = () => {
   //janela principal
   let win
   win = new BrowserWindow({
-    
+    //nativeTheme.themeSource = 'dark',
     //1010
     width: 800,
     //720 (exemplos para mexer na altura e largura)
     height: 600,
     //fullscrean//dxa em tela cheia
-   // resizable: false, //mudar tamanho?
-   // minimizable: true, //minizavel?
+    // resizable: false, //mudar tamanho?
+    // minimizable: true, //minizavel?
     //closable: true, //fechavel?
-   // fullscreen: false, //tela cheia?
-   // autoHideMenuBar: true, //menu bar escondida?
+    // fullscreen: false, //tela cheia?
+    // autoHideMenuBar: true, //menu bar escondida?
     //frame: true, //tira TUDO
   })
 
@@ -28,14 +28,14 @@ const createWindow = () => {
   //atençao antes de importar o recurso menu
   Menu.setApplicationMenu(Menu.buildFromTemplate(template))
 
-  
-//carrega o documento
+
+  //carrega o documento
   win.loadFile('./src/views/index.html')
 }
 //inicializaçao da aplicaçao (assincronismo)
 app.whenReady().then(() => {
   createWindow()
-//só ativar a janela se nenhuma outra estiver ativa
+  //só ativar a janela se nenhuma outra estiver ativa
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) {
       createWindow()
@@ -47,26 +47,27 @@ app.whenReady().then(() => {
 let about
 function aboutWindows() {
   nativeTheme.themeSource = 'system'
-  const mainwindow = BrowserWindow.getFocusedWindow() 
-//vlidaçao de: se existir a janela princial
-if (mainwindow) {
-  about = new BrowserWindow({
+  const mainwindow = BrowserWindow.getFocusedWindow()
+  //vlidaçao de: se existir a janela princial
+  if (mainwindow) {
+    about = new BrowserWindow({
 
-    width: 320,
-    height: 280,
-    autoHideMenuBar: true,
-    resizable: false,
-    minimizable: false,
-    //estabelcer uma relaçao hieraquica entre janelas
-    parent: mainwindow,
-    //
-    modal: true
-  })
-  about.loadFile("./src/views/sobre.html")
-}
+      width: 340,
+      height: 320,
+      autoHideMenuBar: true,
+      resizable: false,
+      minimizable: false,
+      //estabelcer uma relaçao hieraquica entre janelas
+      parent: mainwindow,
+      
+      //
+      modal: true
+    })
+    about.loadFile("./src/views/sobre.html")
+  }
 }
 
- 
+
 
 
 
@@ -82,26 +83,23 @@ app.commandLine.appendSwitch('log-level', '3')
 //template do menu
 const template = [
   {
-    label: 'Notas',
+    label: 'Criar cadastro',
     //qnd vc clicar no notas vai aparecer aqla telinha com varias opçies
     submenu: [
-      //nome do botao
-      {
-       label: 'criar notas',
-       //sla qq é isso
-       acelerator: 'Ctrl+N',
-       //qd vc clicar no criar notas vai da a msg abaixo
-       //click: () => console.log("teste")
-      },
-      {
-        type: 'separator'
-      },
       {
         label: 'Sair',
         acelerator: 'Alt+F4',
         click: () => app.quit()
       }
-    ] 
+    ]
+  },
+  {
+    label: 'Relatório',
+    submenu: [
+      {
+        label: "Clientes"
+      }
+    ]
   },
   {
     label: 'Ferramentas',
@@ -113,18 +111,19 @@ const template = [
       },
       {
         label: "tirar zoom",
-        role:"zoomOut"
+        role: "zoomOut"
       },
+      //ou ctrl + --
       {
         label: "restaurar o zoom padrao",
-        role:"resetZoom"
+        role: "resetZoom"
       },
       {
         type: "separator"
       },
       {
         label: 'DevTools',
-        role:'toggleDevTools',
+        role: 'toggleDevTools',
       }
     ]
   },
@@ -134,13 +133,13 @@ const template = [
     submenu: [
       {
         label: 'repositorio',
-        click: () => shell.openExternal("https://github.com/caallop/sticky-notes.git")
+        click: () => shell.openExternal("https://github.com/caallop/atividade-1.git")
       },
       {
         label: 'sobre',
         click: () => aboutWindows()
       }
-      
+
     ]
   }
 
