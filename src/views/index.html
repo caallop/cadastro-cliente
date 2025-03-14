@@ -11,10 +11,21 @@
       http-equiv="X-Content-Security-Policy"
       content="default-src 'self'; script-src 'self'"
     />
-    <title>Hello from Electron renderer!</title>
+    <title>Cadastro Clientes</title>
+    <link rel="stylesheet" href="../public/css/style.css">
+    <link rel="stylesheet" href="../public/css/bootstrap.min.css">
   </head>
   <body>
     <h1>Hello Electron.</h1>
    
+   
+    <footer>
+        <p id="dataAtual"></p>
+        <img src="../public/img/dboff.png" alt=" icone do banco de dados">
+    </footer>
+
+       <!--bootstrap-  ligar ao index-->
+       <script src="../public/js/bootstrap.min.js"></script>
+       <script src="renderer.js"></script>
   </body>
 </html> 
