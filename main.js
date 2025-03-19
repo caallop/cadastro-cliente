@@ -59,7 +59,7 @@ function aboutWindows() {
       minimizable: false,
       //estabelcer uma relaçao hieraquica entre janelas
       parent: mainwindow,
-      
+
       //
       modal: true
     })
@@ -67,7 +67,29 @@ function aboutWindows() {
   }
 }
 
+function cadastroWindow() {
+  nativeTheme.themeSource = 'light'
+  console.log("teste")
+  // Obter a janela principal
+  const mainWindow = BrowserWindow.getFocusedWindow()
 
+  //validação (se existir a janela principal)
+  if (mainWindow) {
+
+    about = new BrowserWindow({
+      width: 720,
+      height: 580,
+      autoHideMenuBar: true,
+      resizable: false,
+      minimizable: false,
+      // Estabelecer uma relação hierarquica entre janelas
+      parent: mainWindow,
+
+    })
+  }
+
+  about.loadFile('./src/views/cadastro.html')
+}
 
 
 
@@ -86,6 +108,10 @@ const template = [
     label: 'Criar cadastro',
     //qnd vc clicar no notas vai aparecer aqla telinha com varias opçies
     submenu: [
+      {
+        label: 'criar cadastro (botao temporario)',
+        click: () => cadastroWindow()
+      },
       {
         label: 'Sair',
         acelerator: 'Alt+F4',
@@ -149,3 +175,4 @@ const template = [
 
 
 ]
+module.exports = { cadastroWindow }
