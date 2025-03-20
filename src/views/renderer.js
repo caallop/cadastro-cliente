@@ -1,6 +1,4 @@
-const {cadastroWindow} = require('./main.js')
 
-cadastroWindow()
 
 // inserção da data no rodapé
 function obterData() {

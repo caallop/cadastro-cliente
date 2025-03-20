@@ -5,7 +5,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Busca de Endereço por CEP</title>
-  <link rel="shortcut icon" href="img/cadastro.png" type="image/x-icon">
   <link rel="stylesheet" href="../public/css/bootstrap.min.css">
   <link rel="stylesheet" href="../public/css/cadastro.css">
 </head>
@@ -15,7 +14,7 @@
   <!--submit ativa as validaçoes-->
 <form > 
   <div >
-  <div class="form-row">
+  <div class="row">
     <div class="form-group col-md-6">
       <label for="inputEmail4">Email*</label>
       <input type="email" class="form-control" id="inputEmail4" required>
@@ -25,7 +24,7 @@
       <input type="text" value="+55 " class="form-control" id="inputPassword4">
     </div>
   </div>
-<div class="form-row">
+<div class="row">
   <div class="form-group col-md-6">
     <label for="inputAddress">Nome Completo*</label>
     <input type="text" class="form-control" id="inputAddress"  required>
@@ -46,7 +45,7 @@
   </div>
 </div>
 
-  <div class="form-row">
+  <div class="row">
     <div class="form-group col-md-4">
       <label for="cep">CEP:</label>
       <input type="text" id="cep" onblur="buscarEndereco()" class="form-control">
@@ -62,7 +61,7 @@
 
   </div>
 
-  <div class="form-row">
+  <div class="row">
     <div class="form-group col-md-3">
       <label for="Numero">Numero</label>
       <input id="" type="text" class="form-control">
@@ -124,7 +123,11 @@
 </form>
 </section> 
 </div>
-<script src="../public/js/bootstrap.min.js"></script>
+<footer>
+  <p id="dataAtual"></p>
+  <img src="../public/img/dboff.png" alt=" icone do banco de dados">
+</footer>
+<script src="script.js"></script>
 
 </body>
 

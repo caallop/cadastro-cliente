@@ -1,3 +1,5 @@
+const {cadastroWindow} = require('../../main.js')
+
 function buscarEndereco() {
     let cep = document.getElementById('cep').value;
     let urlAPI = `https://viacep.com.br/ws/${cep}/json/`;

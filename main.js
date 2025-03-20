@@ -1,6 +1,6 @@
 console.log("electron processo principal")
 
-const { Menu, shell, nativeTheme } = require('electron/main')
+const { Menu, shell, nativeTheme, ipcMain } = require('electron/main')
 const { app, BrowserWindow } = require('electron/main')
 // importaçao dos recursos do framekwork
 //app se refere a aplicaçao
@@ -35,6 +35,23 @@ const createWindow = () => {
 //inicializaçao da aplicaçao (assincronismo)
 app.whenReady().then(() => {
   createWindow()
+
+
+  ipcMain.on('db-connect', async (event) => {
+    //a linha abaixo estabelece a conexao com o banco de dados
+    await conectar()
+    //enviar ao renderizador uma mensagem para trocar de imagem do icone de status do banco de dados (criar um dlay de 0.5 ou 1 seg para sincronizaçao com a nuvem)
+    setTimeout(() => {
+      event.reply('db-status', "conectado")
+    }, 500) //500ms = 0.5 seg
+  })
+
+
+
+
+
+
+
   //só ativar a janela se nenhuma outra estiver ativa
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) {
@@ -77,7 +94,7 @@ function cadastroWindow() {
   if (mainWindow) {
 
     about = new BrowserWindow({
-      width: 720,
+      width: 1020,
       height: 580,
       autoHideMenuBar: true,
       resizable: false,
