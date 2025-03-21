@@ -1,4 +1,4 @@
-const {cadastroWindow} = require('../../main.js')
+//const {cadastroWindow} = require('../../main')
 
 function buscarEndereco() {
     let cep = document.getElementById('cep').value;

@@ -11,6 +11,6 @@ const { ipcRenderer, contextBridge } = require("electron")
 ipcRenderer.send('db-connect')
 
 //permissao para estabelecer a comunicaçao 
-contextBridge.exposeInMainWorld('api',{
+contextBridge.exposeInMainWorld('api', {
     dbStatus: (message) => ipcRenderer.on('db-status', message)
 })

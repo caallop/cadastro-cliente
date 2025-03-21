@@ -1,10 +1,15 @@
 console.log("electron processo principal")
 
-const { Menu, shell, nativeTheme, ipcMain } = require('electron/main')
-const { app, BrowserWindow } = require('electron/main')
+const { Menu, shell, nativeTheme, ipcMain, app, BrowserWindow } = require('electron/main')
 // importaçao dos recursos do framekwork
+
+// Ativar o preload
+const path = require('node:path')
+
+const { conectar, desconectar } = require('./database.js')
 //app se refere a aplicaçao
 //browsewindow (criaçao da janela)
+
 //nativeTheme (denfinir tema claro ou escuro)
 const createWindow = () => {
   //janela principal
@@ -22,6 +27,9 @@ const createWindow = () => {
     // fullscreen: false, //tela cheia?
     // autoHideMenuBar: true, //menu bar escondida?
     //frame: true, //tira TUDO
+    webPreferences: {
+      preload: path.join(__dirname, 'preload.js')
+    }
   })
 
   //carregr o menu personalizado
@@ -32,14 +40,18 @@ const createWindow = () => {
   //carrega o documento
   win.loadFile('./src/views/index.html')
 }
+
 //inicializaçao da aplicaçao (assincronismo)
 app.whenReady().then(() => {
   createWindow()
-
+  console.log("createWindow()")
 
   ipcMain.on('db-connect', async (event) => {
+    console.log("Entrou em ipcMain.on")
     //a linha abaixo estabelece a conexao com o banco de dados
     await conectar()
+    //await conectar()
+    console.log("conectado main")
     //enviar ao renderizador uma mensagem para trocar de imagem do icone de status do banco de dados (criar um dlay de 0.5 ou 1 seg para sincronizaçao com a nuvem)
     setTimeout(() => {
       event.reply('db-status', "conectado")
@@ -59,6 +71,30 @@ app.whenReady().then(() => {
     }
   })
 })
+
+function cadastroWindow() {
+  nativeTheme.themeSource = 'light'
+  console.log("teste")
+  // Obter a janela principal
+  const mainWindow = BrowserWindow.getFocusedWindow()
+
+  //validação (se existir a janela principal)
+  if (mainWindow) {
+
+    about = new BrowserWindow({
+      width: 1020,
+      height: 580,
+      autoHideMenuBar: true,
+      resizable: false,
+      minimizable: false,
+      // Estabelecer uma relação hierarquica entre janelas
+      parent: mainWindow
+
+    })
+  }
+
+  about.loadFile('./src/views/cadastro.html')
+}
 
 //janela sobre
 let about
@@ -84,31 +120,9 @@ function aboutWindows() {
   }
 }
 
-function cadastroWindow() {
-  nativeTheme.themeSource = 'light'
-  console.log("teste")
-  // Obter a janela principal
-  const mainWindow = BrowserWindow.getFocusedWindow()
-
-  //validação (se existir a janela principal)
-  if (mainWindow) {
-
-    about = new BrowserWindow({
-      width: 1020,
-      height: 580,
-      autoHideMenuBar: true,
-      resizable: false,
-      minimizable: false,
-      // Estabelecer uma relação hierarquica entre janelas
-      parent: mainWindow,
-
-    })
-  }
-
-  about.loadFile('./src/views/cadastro.html')
-}
-
-
+app.on('before-quit', async () => {
+  await desconectar()
+})
 
 //se o sistema não for mac, fechar as janelas quanto encerrar a aplicaçao quando a janeçla for fechada
 app.on('window-all-closed', () => {
