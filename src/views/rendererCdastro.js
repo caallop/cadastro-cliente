@@ -3,7 +3,7 @@
 function buscarEndereco() {
     let cep = document.getElementById('cep').value;
     let urlAPI = `https://viacep.com.br/ws/${cep}/json/`;
-
+    console.log("teste")
     fetch(urlAPI)
         .then(response => response.json())  // Corrigido o nome da variável para 'response'
         .then(dados => {
@@ -20,7 +20,7 @@ function buscarEndereco() {
 
 // Validar CPF
 function validaCPF(cpf) {
-
+    console.log("teste")
     cpf = cpf.replace(/\D/g, ''); // Remove caracteres não numéricos
 
     if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) {
@@ -44,20 +44,15 @@ function validaCPF(cpf) {
     resto = (soma * 10) % 11;
     if (resto === 10 || resto === 11) resto = 0;
     if (resto !== parseInt(cpf[10])) return false;
-
     return true;
 }
 
 // Checar CPF
 function testaCPF() {
-
     let inputCPF = document.getElementById('cpf');
     let cpfNotificacao = document.getElementById('cpfNotificacao');
-
     if (!validaCPF(inputCPF.value)) {
         cpfNotificacao.style.display = "block"; // Mostra o popup
-        
-
     } else {
         cpfNotificacao.style.display = "none"; // Esconde o popup
     }

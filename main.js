@@ -1,15 +1,11 @@
 console.log("electron processo principal")
-
 const { Menu, shell, nativeTheme, ipcMain, app, BrowserWindow } = require('electron/main')
 // importaçao dos recursos do framekwork
-
 // Ativar o preload
 const path = require('node:path')
-
 const { conectar, desconectar } = require('./database.js')
 //app se refere a aplicaçao
 //browsewindow (criaçao da janela)
-
 //nativeTheme (denfinir tema claro ou escuro)
 const createWindow = () => {
   //janela principal
@@ -31,7 +27,6 @@ const createWindow = () => {
       preload: path.join(__dirname, 'preload.js')
     }
   })
-
   //carregr o menu personalizado
   //atençao antes de importar o recurso menu
   Menu.setApplicationMenu(Menu.buildFromTemplate(template))
@@ -40,30 +35,18 @@ const createWindow = () => {
   //carrega o documento
   win.loadFile('./src/views/index.html')
 }
-
 //inicializaçao da aplicaçao (assincronismo)
 app.whenReady().then(() => {
   createWindow()
-  console.log("createWindow()")
-
   ipcMain.on('db-connect', async (event) => {
-    console.log("Entrou em ipcMain.on")
     //a linha abaixo estabelece a conexao com o banco de dados
     await conectar()
     //await conectar()
-    console.log("conectado main")
     //enviar ao renderizador uma mensagem para trocar de imagem do icone de status do banco de dados (criar um dlay de 0.5 ou 1 seg para sincronizaçao com a nuvem)
     setTimeout(() => {
       event.reply('db-status', "conectado")
     }, 500) //500ms = 0.5 seg
   })
-
-
-
-
-
-
-
   //só ativar a janela se nenhuma outra estiver ativa
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) {
@@ -71,16 +54,12 @@ app.whenReady().then(() => {
     }
   })
 })
-
 function cadastroWindow() {
   nativeTheme.themeSource = 'light'
-  console.log("teste")
   // Obter a janela principal
   const mainWindow = BrowserWindow.getFocusedWindow()
-
   //validação (se existir a janela principal)
   if (mainWindow) {
-
     about = new BrowserWindow({
       width: 1020,
       height: 580,
@@ -89,13 +68,10 @@ function cadastroWindow() {
       minimizable: false,
       // Estabelecer uma relação hierarquica entre janelas
       parent: mainWindow
-
     })
   }
-
   about.loadFile('./src/views/cadastro.html')
 }
-
 //janela sobre
 let about
 function aboutWindows() {
@@ -104,7 +80,6 @@ function aboutWindows() {
   //vlidaçao de: se existir a janela princial
   if (mainwindow) {
     about = new BrowserWindow({
-
       width: 500,
       height: 320,
       autoHideMenuBar: true,
@@ -112,27 +87,25 @@ function aboutWindows() {
       minimizable: false,
       //estabelcer uma relaçao hieraquica entre janelas
       parent: mainwindow,
-
-      //
       modal: true
     })
     about.loadFile("./src/views/sobre.html")
   }
 }
-
 app.on('before-quit', async () => {
   await desconectar()
 })
-
 //se o sistema não for mac, fechar as janelas quanto encerrar a aplicaçao quando a janeçla for fechada
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit()
   }
 })
-
 app.commandLine.appendSwitch('log-level', '3')
-
+//abrir janela pelo botao 
+ipcMain.on('open-client', (event) => {
+  cadastroWindow()
+})
 //template do menu
 const template = [
   {
@@ -203,7 +176,5 @@ const template = [
 
     ]
   }
-
-
 ]
 module.exports = { cadastroWindow }

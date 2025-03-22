@@ -14,3 +14,9 @@ footer p{
  color: black;
  font-size: 1.1em;
 }
+
+button{
+    left: 200px;
+    border-color: burlywood;
+    border-radius: 20px;
+}
