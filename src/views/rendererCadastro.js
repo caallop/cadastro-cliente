@@ -3,7 +3,6 @@
 function buscarEndereco() {
     let cep = document.getElementById('cep').value;
     let urlAPI = `https://viacep.com.br/ws/${cep}/json/`;
-    console.log("teste")
     fetch(urlAPI)
         .then(response => response.json())  // Corrigido o nome da variável para 'response'
         .then(dados => {
@@ -20,7 +19,6 @@ function buscarEndereco() {
 
 // Validar CPF
 function validaCPF(cpf) {
-    console.log("teste")
     cpf = cpf.replace(/\D/g, ''); // Remove caracteres não numéricos
 
     if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) {
@@ -57,3 +55,27 @@ function testaCPF() {
         cpfNotificacao.style.display = "none"; // Esconde o popup
     }
 }
+
+
+//fluxo
+let frmCadastro = document.getElementById('frmCadastro')
+//abaixo os let('S) com os campos (nome, idade...) com os id's que deve ser colocado em cada linha do html cadastro, exemplo em notes do sticky notes.
+//====
+
+
+
+
+//====
+
+//crud create - inicio
+frmCadastro.addEventListener('submit', async(event)=>{
+    event.preventDefault()
+    console.log ("teste")
+})
+
+
+
+
+//crud create - fim
+
+
