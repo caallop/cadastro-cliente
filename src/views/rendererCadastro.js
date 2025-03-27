@@ -61,16 +61,22 @@ function testaCPF() {
 let frmCadastro = document.getElementById('frmCadastro')
 //abaixo os let('S) com os campos (nome, idade...) com os id's que deve ser colocado em cada linha do html cadastro, exemplo em notes do sticky notes.
 //====
-
+let cadEmail = document.getElementById('cadEmail')
 
 
 
 //====
 
 //crud create - inicio
-frmCadastro.addEventListener('submit', async(event)=>{
+frmCadastro.addEventListener('submit', async (event) => {
     event.preventDefault()
-    console.log ("teste")
+
+    console.log(cadEmail.value,)
+
+    const cadastroBanco = {
+        gmail: cadEmail.value
+    }
+    api.cadastroBanco(cadastroCliente)
 })
 
 

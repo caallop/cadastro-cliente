@@ -178,3 +178,7 @@ const template = [
   }
 ]
 module.exports = { cadastroWindow }
+
+ipcMain.on('cadastrar-cliente', async(event, cadastroCliente)=>{
+  console.log(cadastroCliente)
+})
