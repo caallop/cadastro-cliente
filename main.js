@@ -2,8 +2,12 @@ console.log("electron processo principal")
 const { Menu, shell, nativeTheme, ipcMain, app, BrowserWindow } = require('electron/main')
 // importaçao dos recursos do framekwork
 // Ativar o preload
+
+const clientModel = require ('./src/models/Client.js')
+
 const path = require('node:path')
 const { conectar, desconectar } = require('./database.js')
+const { NOMEM } = require('node:dns')
 //app se refere a aplicaçao
 //browsewindow (criaçao da janela)
 //nativeTheme (denfinir tema claro ou escuro)
@@ -36,24 +40,8 @@ const createWindow = () => {
   win.loadFile('./src/views/index.html')
 }
 //inicializaçao da aplicaçao (assincronismo)
-app.whenReady().then(() => {
-  createWindow()
-  ipcMain.on('db-connect', async (event) => {
-    //a linha abaixo estabelece a conexao com o banco de dados
-    await conectar()
-    //await conectar()
-    //enviar ao renderizador uma mensagem para trocar de imagem do icone de status do banco de dados (criar um dlay de 0.5 ou 1 seg para sincronizaçao com a nuvem)
-    setTimeout(() => {
-      event.reply('db-status', "conectado")
-    }, 500) //500ms = 0.5 seg
-  })
-  //só ativar a janela se nenhuma outra estiver ativa
-  app.on('activate', () => {
-    if (BrowserWindow.getAllWindows().length === 0) {
-      createWindow()
-    }
-  })
-})
+
+
 function cadastroWindow() {
   nativeTheme.themeSource = 'light'
   // Obter a janela principal
@@ -67,7 +55,10 @@ function cadastroWindow() {
       resizable: false,
       minimizable: false,
       // Estabelecer uma relação hierarquica entre janelas
-      parent: mainWindow
+      parent: mainWindow,
+      webPreferences: {
+        preload: path.join(__dirname, 'preload.js')
+      }
     })
   }
   about.loadFile('./src/views/cadastro.html')
@@ -103,9 +94,29 @@ app.on('window-all-closed', () => {
 })
 app.commandLine.appendSwitch('log-level', '3')
 //abrir janela pelo botao 
+
+app.whenReady().then(() => {
+  createWindow()
+  ipcMain.on('db-connect', async (event) => {
+    //a linha abaixo estabelece a conexao com o banco de dados
+    await conectar()
+    //await conectar()
+    //enviar ao renderizador uma mensagem para trocar de imagem do icone de status do banco de dados (criar um dlay de 0.5 ou 1 seg para sincronizaçao com a nuvem)
+    setTimeout(() => {
+      event.reply('db-status', "conectado")
+    }, 500) //500ms = 0.5 seg
+  })
+  //só ativar a janela se nenhuma outra estiver ativa
+  app.on('activate', () => {
+    if (BrowserWindow.getAllWindows().length === 0) {
+      createWindow()
+    }
+  })
+})
 ipcMain.on('open-client', (event) => {
   cadastroWindow()
 })
+
 //template do menu
 const template = [
   {
@@ -181,4 +192,19 @@ module.exports = { cadastroWindow }
 
 ipcMain.on('cadastrar-cliente', async(event, cadastroCliente)=>{
   console.log(cadastroCliente)
+
+  const newClient = clientModel ({
+    gmail: cadastroCliente.gmailCli,
+    telefone:cadastroCliente.telCli,
+    cpf: cadastroCliente.cpfCli,
+    nome: cadastroCliente.nomeCli,
+    sexo: cadastroCliente.sexoCli,
+    cep: cadastroCliente.cepCli,
+    bairro: cadastroCliente.bairroCli,
+    numero: cadastroCliente.numCli,
+    complemento: cadastroCliente.compCli,
+    estado: cadastroCliente.ufCli,
+    cidade: cadastroCliente.cidCli
+  })
+  newClient.save()
 })

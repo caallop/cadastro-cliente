@@ -30,5 +30,5 @@ api.dbStatus((event, message) => {
 })
 
 function cadastroWindow() {
-    api.openClient()
+  api.openClient()
 }

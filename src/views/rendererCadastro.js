@@ -1,16 +1,16 @@
 //const {cadastroWindow} = require('../../main')
 
 function buscarEndereco() {
-    let cep = document.getElementById('cep').value;
+    let cep = document.getElementById('cadCep').value;
     let urlAPI = `https://viacep.com.br/ws/${cep}/json/`;
     fetch(urlAPI)
         .then(response => response.json())  // Corrigido o nome da variável para 'response'
         .then(dados => {
-            document.getElementById('logradouro').value = dados.logradouro;
-            document.getElementById('bairro').value = dados.bairro;
-            document.getElementById('cidade').value = dados.localidade;
-            document.getElementById('uf').value = dados.uf;
-            document.getElementById('complemento').value = dados.complemento;
+            document.getElementById('cadLogra').value = dados.logradouro;
+            document.getElementById('cadBairro').value = dados.bairro;
+            document.getElementById('cadCid').value = dados.localidade;
+            document.getElementById('cadUf').value = dados.uf;
+            document.getElementById('cadComp').value = dados.complemento;
         })
         .catch(error => console.error('Erro ao buscar o endereço:', error));
 }
@@ -47,7 +47,7 @@ function validaCPF(cpf) {
 
 // Checar CPF
 function testaCPF() {
-    let inputCPF = document.getElementById('cpf');
+    let inputCPF = document.getElementById('cadCpf');
     let cpfNotificacao = document.getElementById('cpfNotificacao');
     if (!validaCPF(inputCPF.value)) {
         cpfNotificacao.style.display = "block"; // Mostra o popup
@@ -62,6 +62,17 @@ let frmCadastro = document.getElementById('frmCadastro')
 //abaixo os let('S) com os campos (nome, idade...) com os id's que deve ser colocado em cada linha do html cadastro, exemplo em notes do sticky notes.
 //====
 let cadEmail = document.getElementById('cadEmail')
+let cadTel = document.getElementById('cadTel')
+let cadNome = document.getElementById('cadNome')
+let cadCpf = document.getElementById('cadCpf')
+let cadSexo = document.getElementById('cadSexo')
+let cadCep = document.getElementById('cadCep')
+let cadBairro = document.getElementById('cadBairro')
+let cadNumb = document.getElementById('cadNumb')
+let cadComp = document.getElementById('cadComp')
+let cadUf = document.getElementById('cadUf')
+let cadCid = document.getElementById('cadCid')
+
 
 
 
@@ -70,12 +81,21 @@ let cadEmail = document.getElementById('cadEmail')
 //crud create - inicio
 frmCadastro.addEventListener('submit', async (event) => {
     event.preventDefault()
+    console.log(cadEmail.value,cadTel.value,cadNome.value,cadCpf.value,cadSexo.value,)
+    const cadastroCliente = {
+        gmailCli: cadEmail.value,
+        telCli: cadTel.value,
+        cpfCli: cadCpf.value,
+        nomeCli:cadNome.value,
+        sexoCli:cadSexo.value,
+        cepCli:cadCep.value,
+        bairroCli:cadBairro.value,
+        numCli:cadNumb.value,
+        compCli:cadComp.value,
+        ufCli:cadUf.value,
+        cidCli:cadCid.value
 
-    console.log(cadEmail.value,)
-
-    const cadastroBanco = {
-        gmail: cadEmail.value
-    }
+    }  
     api.cadastroBanco(cadastroCliente)
 })
 
