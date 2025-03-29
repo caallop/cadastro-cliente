@@ -40,6 +40,16 @@ color: black;
 font-size: 1.1em;
 }
 
+#btnReset{
+  width: 48px;
+  height: 48px;
+  background-image: url('../img/borracha.png');
+  border: none;
+  cursor:pointer;
+  margin-left: 10px;
+  margin-right: 11px;
+}
+
 /*
 .localizaçao {
  

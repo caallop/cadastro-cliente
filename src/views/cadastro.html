@@ -12,7 +12,7 @@
 
 <body class="bg-dark text-light">
   <div class="container" style="margin-top: 20px; border-radius: 15px; color: aqua; border: solid 2px;">
-    <input style="margin: -1px;" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+    <input id="buscarCli" style="margin: -1px;" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
   </div>
 
 <br>
@@ -113,8 +113,10 @@
           </div>
           <div class="form-group">
           </div>
-          <button type="submit" class="btn btn-primary">Salvar</button>
-          <button type="reset" class="btn btn-primary">Limpar</button>
+          <button type="submit" class="btn btn-success" id="btnCreate">Salvar</button>
+          <button class="btn btn-warning" type="submit" id="btnUpdate" disabled>Editar</button>
+          <button class="btn btn-danger" type="button" id="btnDelete" disabled>Excluir</button>
+          <button type="reset" class="btn" onclick="resetForm()" id="btnReset"></button>
         </div>
       </form>
     </section>

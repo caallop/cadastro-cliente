@@ -1,5 +1,26 @@
 //const {cadastroWindow} = require('../../main')
 
+const foco = document.getElementById('buscarCli')
+document.addEventListener('DOMContentLoaded', () =>{
+//barra na busca do cliente 
+foco.focus()
+//desativar os botoes
+btnUpdate.disabled = true
+btnDelete.disabled = true
+
+
+})
+
+function resetForm(){
+    //recarrega a pagina
+    location.reload()
+}
+
+//uso da api para resetar quando salvar, editar, sair e excluir um cliente
+api.resetForm((args) =>{
+    resetForm()
+})
+
 function buscarEndereco() {
     let cep = document.getElementById('cadCep').value;
     let urlAPI = `https://viacep.com.br/ws/${cep}/json/`;

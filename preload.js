@@ -14,5 +14,6 @@ ipcRenderer.send('db-connect')
 contextBridge.exposeInMainWorld('api', {
     dbStatus: (message) => ipcRenderer.on('db-status', message),
     openClient: () => ipcRenderer.send('open-client'),
-    cadastroBanco: (cadastroCliente) =>  ipcRenderer.send('cadastrar-cliente', cadastroCliente)
+    cadastroBanco: (cadastroCliente) =>  ipcRenderer.send('cadastrar-cliente', cadastroCliente),
+    resetForm: (args) => ipcRenderer.on('reset-form', args)
 })

@@ -1,9 +1,11 @@
 console.log("electron processo principal")
-const { Menu, shell, nativeTheme, ipcMain, app, BrowserWindow } = require('electron/main')
+
+const { Menu, shell, nativeTheme, ipcMain, app, BrowserWindow, dialog } = require('electron/main')
+//dialog: é o modulo electron para ativar caixa de mensagens
 // importaçao dos recursos do framekwork
 // Ativar o preload
 
-const clientModel = require ('./src/models/Client.js')
+const clientModel = require('./src/models/Client.js')
 
 const path = require('node:path')
 const { conectar, desconectar } = require('./database.js')
@@ -190,12 +192,12 @@ const template = [
 ]
 module.exports = { cadastroWindow }
 
-ipcMain.on('cadastrar-cliente', async(event, cadastroCliente)=>{
+ipcMain.on('cadastrar-cliente', async (event, cadastroCliente) => {
   console.log(cadastroCliente)
 
-  const newClient = clientModel ({
+  const newClient = clientModel({
     gmail: cadastroCliente.gmailCli,
-    telefone:cadastroCliente.telCli,
+    telefone: cadastroCliente.telCli,
     cpf: cadastroCliente.cpfCli,
     nome: cadastroCliente.nomeCli,
     sexo: cadastroCliente.sexoCli,
@@ -206,5 +208,19 @@ ipcMain.on('cadastrar-cliente', async(event, cadastroCliente)=>{
     estado: cadastroCliente.ufCli,
     cidade: cadastroCliente.cidCli
   })
-  newClient.save()
+  await newClient.save()
+  //confirmaçao do cliente adicionado ao banco (uso do dialog)
+  dialog.showMessageBox({
+    type: 'info',
+    title: "aviso",
+    message: "cliente adicionado com sucesso",
+    buttons: ['OK']
+  }).then((result) => {
+    if (result.response === 0) {
+    event.reply('reset-form')
+    }
+
+  })
+
+
 })
