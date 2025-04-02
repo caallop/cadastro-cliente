@@ -1,21 +1,30 @@
-console.log("electron processo principal")
+console.log("electron processo principal");
 
-const { Menu, shell, nativeTheme, ipcMain, app, BrowserWindow, dialog } = require('electron/main')
+const {
+  Menu,
+  shell,
+  nativeTheme,
+  ipcMain,
+  app,
+  BrowserWindow,
+  dialog,
+} = require("electron/main");
 //dialog: é o modulo electron para ativar caixa de mensagens
 // importaçao dos recursos do framekwork
 // Ativar o preload
 
-const clientModel = require('./src/models/Client.js')
+const clientModel = require("./src/models/Client.js");
 
-const path = require('node:path')
-const { conectar, desconectar } = require('./database.js')
-const { NOMEM } = require('node:dns')
+const path = require("node:path");
+const { conectar, desconectar } = require("./database.js");
+const { NOMEM } = require("node:dns");
+const { error } = require("node:console");
 //app se refere a aplicaçao
 //browsewindow (criaçao da janela)
 //nativeTheme (denfinir tema claro ou escuro)
 const createWindow = () => {
   //janela principal
-  let win
+  let win;
   win = new BrowserWindow({
     //nativeTheme.themeSource = 'dark',
     //1010
@@ -30,24 +39,22 @@ const createWindow = () => {
     // autoHideMenuBar: true, //menu bar escondida?
     //frame: true, //tira TUDO
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js')
-    }
-  })
+      preload: path.join(__dirname, "preload.js"),
+    },
+  });
   //carregr o menu personalizado
   //atençao antes de importar o recurso menu
-  Menu.setApplicationMenu(Menu.buildFromTemplate(template))
-
+  Menu.setApplicationMenu(Menu.buildFromTemplate(template));
 
   //carrega o documento
-  win.loadFile('./src/views/index.html')
-}
+  win.loadFile("./src/views/index.html");
+};
 //inicializaçao da aplicaçao (assincronismo)
 
-
 function cadastroWindow() {
-  nativeTheme.themeSource = 'light'
+  nativeTheme.themeSource = "light";
   // Obter a janela principal
-  const mainWindow = BrowserWindow.getFocusedWindow()
+  const mainWindow = BrowserWindow.getFocusedWindow();
   //validação (se existir a janela principal)
   if (mainWindow) {
     about = new BrowserWindow({
@@ -59,17 +66,17 @@ function cadastroWindow() {
       // Estabelecer uma relação hierarquica entre janelas
       parent: mainWindow,
       webPreferences: {
-        preload: path.join(__dirname, 'preload.js')
-      }
-    })
+        preload: path.join(__dirname, "preload.js"),
+      },
+    });
   }
-  about.loadFile('./src/views/cadastro.html')
+  about.loadFile("./src/views/cadastro.html");
 }
 //janela sobre
-let about
+let about;
 function aboutWindows() {
-  nativeTheme.themeSource = 'system'
-  const mainwindow = BrowserWindow.getFocusedWindow()
+  nativeTheme.themeSource = "system";
+  const mainwindow = BrowserWindow.getFocusedWindow();
   //vlidaçao de: se existir a janela princial
   if (mainwindow) {
     about = new BrowserWindow({
@@ -80,147 +87,166 @@ function aboutWindows() {
       minimizable: false,
       //estabelcer uma relaçao hieraquica entre janelas
       parent: mainwindow,
-      modal: true
-    })
-    about.loadFile("./src/views/sobre.html")
+      modal: true,
+    });
+    about.loadFile("./src/views/sobre.html");
   }
 }
-app.on('before-quit', async () => {
-  await desconectar()
-})
+app.on("before-quit", async () => {
+  await desconectar();
+});
 //se o sistema não for mac, fechar as janelas quanto encerrar a aplicaçao quando a janeçla for fechada
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
-    app.quit()
+app.on("window-all-closed", () => {
+  if (process.platform !== "darwin") {
+    app.quit();
   }
-})
-app.commandLine.appendSwitch('log-level', '3')
-//abrir janela pelo botao 
+});
+app.commandLine.appendSwitch("log-level", "3");
+//abrir janela pelo botao
 
 app.whenReady().then(() => {
-  createWindow()
-  ipcMain.on('db-connect', async (event) => {
+  createWindow();
+  ipcMain.on("db-connect", async (event) => {
     //a linha abaixo estabelece a conexao com o banco de dados
-    await conectar()
+    await conectar();
     //await conectar()
     //enviar ao renderizador uma mensagem para trocar de imagem do icone de status do banco de dados (criar um dlay de 0.5 ou 1 seg para sincronizaçao com a nuvem)
     setTimeout(() => {
-      event.reply('db-status', "conectado")
-    }, 500) //500ms = 0.5 seg
-  })
+      event.reply("db-status", "conectado");
+    }, 500); //500ms = 0.5 seg
+  });
   //só ativar a janela se nenhuma outra estiver ativa
-  app.on('activate', () => {
+  app.on("activate", () => {
     if (BrowserWindow.getAllWindows().length === 0) {
-      createWindow()
+      createWindow();
     }
-  })
-})
-ipcMain.on('open-client', (event) => {
-  cadastroWindow()
-})
+  });
+});
+ipcMain.on("open-client", (event) => {
+  cadastroWindow();
+});
 
 //template do menu
 const template = [
   {
-    label: 'Criar cadastro',
+    label: "Criar cadastro",
     //qnd vc clicar no notas vai aparecer aqla telinha com varias opçies
     submenu: [
       {
-        label: 'criar cadastro (botao temporario)',
-        click: () => cadastroWindow()
+        label: "criar cadastro (botao temporario)",
+        click: () => cadastroWindow(),
       },
       {
-        label: 'Sair',
-        acelerator: 'Alt+F4',
-        click: () => app.quit()
-      }
-    ]
+        label: "Sair",
+        acelerator: "Alt+F4",
+        click: () => app.quit(),
+      },
+    ],
   },
   {
-    label: 'Relatório',
+    label: "Relatório",
     submenu: [
       {
-        label: "Clientes"
-      }
-    ]
+        label: "Clientes",
+      },
+    ],
   },
   {
-    label: 'Ferramentas',
+    label: "Ferramentas",
     submenu: [
       {
-        label: 'aplicar zoom',
-        role: 'zoomIn'
+        label: "aplicar zoom",
+        role: "zoomIn",
         //ou control+ ++
       },
       {
         label: "tirar zoom",
-        role: "zoomOut"
+        role: "zoomOut",
       },
       //ou ctrl + --
       {
         label: "restaurar o zoom padrao",
-        role: "resetZoom"
+        role: "resetZoom",
       },
       {
-        type: "separator"
+        type: "separator",
       },
       {
-        label: 'DevTools',
-        role: 'toggleDevTools',
+        label: "DevTools",
+        role: "toggleDevTools",
       },
       {
-        label: 'recarregar',
-        role: 'reload'
-      }
-    ]
+        label: "recarregar",
+        role: "reload",
+      },
+    ],
   },
 
   {
-    label: 'Ajuda',
+    label: "Ajuda",
     submenu: [
       {
-        label: 'repositorio',
-        click: () => shell.openExternal("https://github.com/caallop/atividade-1.git")
+        label: "repositorio",
+        click: () =>
+          shell.openExternal("https://github.com/caallop/atividade-1.git"),
       },
       {
-        label: 'sobre',
-        click: () => aboutWindows()
+        label: "sobre",
+        click: () => aboutWindows(),
+      },
+    ],
+  },
+];
+module.exports = { cadastroWindow };
+
+ipcMain.on("cadastrar-cliente", async (event, cadastroCliente) => {
+  console.log(cadastroCliente);
+
+  try {
+    const newClient = clientModel({
+      gmail: cadastroCliente.gmailCli,
+      telefone: cadastroCliente.telCli,
+      cpf: cadastroCliente.cpfCli,
+      nome: cadastroCliente.nomeCli,
+      sexo: cadastroCliente.sexoCli,
+      cep: cadastroCliente.cepCli,
+      bairro: cadastroCliente.bairroCli,
+      numero: cadastroCliente.numCli,
+      complemento: cadastroCliente.compCli,
+      estado: cadastroCliente.ufCli,
+      cidade: cadastroCliente.cidCli,
+    });
+    await newClient.save();
+    //confirmaçao do cliente adicionado ao banco (uso do dialog)
+    dialog
+      .showMessageBox({
+        type: "info",
+        title: "aviso",
+        message: "cliente adicionado com sucesso",
+        buttons: ["OK"],
+      })
+      .then((result) => {
+        console.log(error);
+        if (result.response === 0) {
+          event.reply("reset-form");
+        }
+      });
+  } catch (error) {
+    if (error.code === 11000) {
+      dialog
+        .showMessageBox({
+          type: "error",
+          title: "CPF",
+          message: "CPF já cadastrado",
+          buttons: ["OK"],
+        })
+        .then((result) => {});
+      console.log("CPF já cadastrado \nVerifique o numero digitado.");
+      if (result.response === 0 ){
+        event.reply("rest-Cpf")
       }
-
-    ]
-  }
-]
-module.exports = { cadastroWindow }
-
-ipcMain.on('cadastrar-cliente', async (event, cadastroCliente) => {
-  console.log(cadastroCliente)
-
-  const newClient = clientModel({
-    gmail: cadastroCliente.gmailCli,
-    telefone: cadastroCliente.telCli,
-    cpf: cadastroCliente.cpfCli,
-    nome: cadastroCliente.nomeCli,
-    sexo: cadastroCliente.sexoCli,
-    cep: cadastroCliente.cepCli,
-    bairro: cadastroCliente.bairroCli,
-    numero: cadastroCliente.numCli,
-    complemento: cadastroCliente.compCli,
-    estado: cadastroCliente.ufCli,
-    cidade: cadastroCliente.cidCli
-  })
-  await newClient.save()
-  //confirmaçao do cliente adicionado ao banco (uso do dialog)
-  dialog.showMessageBox({
-    type: 'info',
-    title: "aviso",
-    message: "cliente adicionado com sucesso",
-    buttons: ['OK']
-  }).then((result) => {
-    if (result.response === 0) {
-    event.reply('reset-form')
+    } else {
+      console.log(error);
     }
-
-  })
-
-
-})
+  }
+});

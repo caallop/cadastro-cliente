@@ -1,16 +1,16 @@
 @charset "utf-8";
 
 @font-face {
-    font-family: "Inter";
-    src: url(../css/Inter/Inter-Italic-VariableFont_opsz\,wght.ttf);
+  font-family: "Inter";
+  src: url(../css/Inter/Inter-Italic-VariableFont_opsz\wght.ttf);
 }
 
-*{
-    font-family: "Inter";
-    background-color: aquamarine;
+* {
+  font-family: "Inter";
+  background-color: aquamarine;
 }
 
 hr {
-        margin-top: -20px;
-    background-color: black;
+  margin-top: -20px;
+  background-color: black;
 }

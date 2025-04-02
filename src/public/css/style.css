@@ -1,24 +1,24 @@
 @charset "UTF-8";
 footer {
-    width: 100%;
-    height: 29px;
-    background-color: aquamarine;
-    display: flex;
-    justify-content: space-between;
-   
-    position: fixed;
-    bottom: 0;
+  width: 100%;
+  height: 29px;
+  background-color: aquamarine;
+  display: flex;
+  justify-content: space-between;
+
+  position: fixed;
+  bottom: 0;
 }
 
-footer p{
- color: black;
- font-size: 1.1em;
+footer p {
+  color: black;
+  font-size: 1.1em;
 }
 
-button{
-    width: 96px;
-    height: 96px;
-    left: 200px;
-    border: none;
-    background-image: url('../img/cadastro.png');
+button {
+  width: 96px;
+  height: 96px;
+  left: 200px;
+  border: none;
+  background-image: url("../img/cadastro.png");
 }

@@ -4,55 +4,48 @@
  */
 
 //importaçao dos recusrsos do moongose
-const { model, Schema, version } = require('mongoose')
+const { model, Schema, version } = require("mongoose");
 
 //criaçao da estutura da coleçao
-const clientSchema = new Schema({
+const clientSchema = new Schema(
+  {
     gmail: {
-        type: String
-
+      type: String,
     },
     telefone: {
-        type: String
-
+      type: String,
     },
     cpf: {
-        type: String
-
+      type: String,
+      unique: true,
+      index: true,
     },
     nome: {
-        type: String
-
+      type: String,
     },
     sexo: {
-        type: String
-
+      type: String,
     },
     cep: {
-        type: String
-
+      type: String,
     },
     bairro: {
-        type: String
-
+      type: String,
     },
     numero: {
-        type: String
-
+      type: String,
     },
     complemento: {
-        type: String
-
+      type: String,
     },
     estado: {
-        type: String
-
+      type: String,
     },
     cidade: {
-        type: String
-
-    }
-
-}, { versionKey: false })
+      type: String,
+    },
+  },
+  { versionKey: false }
+);
 //exportar o modelo de dados para o main.js
-module.exports = model('Clientes', clientSchema)
+module.exports = model("Clientes", clientSchema);
