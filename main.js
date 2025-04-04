@@ -13,12 +13,21 @@ const {
 // importaçao dos recursos do framekwork
 // Ativar o preload
 
+//shell: acessar links e aplicações externos
+
 const clientModel = require("./src/models/Client.js");
 
 const path = require("node:path");
 const { conectar, desconectar } = require("./database.js");
 const { NOMEM } = require("node:dns");
 const { error } = require("node:console");
+
+//importaçao da biblioteca nativa do javascript para manipular arquivos
+const fs = require("fs");
+
+//importaçao do pacote jspdf (biblioteca para trabalhar com arquivos pdf) npm install jspdf
+
+const { jspdf, default: jsPDF } = require("jspdf");
 //app se refere a aplicaçao
 //browsewindow (criaçao da janela)
 //nativeTheme (denfinir tema claro ou escuro)
@@ -148,6 +157,7 @@ const template = [
     submenu: [
       {
         label: "Clientes",
+        click: () => relatorioClientes(),
       },
     ],
   },
@@ -240,13 +250,127 @@ ipcMain.on("cadastrar-cliente", async (event, cadastroCliente) => {
           message: "CPF já cadastrado",
           buttons: ["OK"],
         })
-        .then((result) => {});
-      console.log("CPF já cadastrado \nVerifique o numero digitado.");
-      if (result.response === 0 ){
-        event.reply("rest-Cpf")
-      }
+        .then((result) => {
+          if (result.response === 0) {
+            event.reply("reset-Cpf");
+          }
+        });
     } else {
       console.log(error);
     }
   }
 });
+
+//====================================================
+// relatorio de clientes inicio ======================
+
+async function relatorioClientes() {
+  try {
+    //====================================================
+    //          configuraçao do documento pdf
+    //====================================================
+    const doc = new jsPDF("P", "mm", "a4");
+
+    //p (portrait[de pe]) l (landscape)
+    //mm (mediçao em milimetros como se ofsse folha de papel)
+    //A4(tamanho da "folha") (210mm por 297mm)
+
+    //inserir a data atual no documento
+    const dataAtual = new Date().toLocaleDateString("pt-BR");
+    //a linha abaixo escreve um texto no documento
+    //doc.text() coloca um texto dentro do pdf
+    //doc.setFontSize() tamanho da fonte por px
+    doc.setFontSize(10);
+    doc.text(`Data: ${dataAtual}`, 170, 15); //(x,y (mm))
+    doc.setFontSize(18);
+    doc.text(`Relatorio De Clientes`, 15, 20);
+    doc.setFontSize(12);
+    //variavel de apoio
+    let y = 40;
+    doc.text("Nome", 14, y);
+    doc.text("Telefone", 85, y);
+    doc.text("E-mail", 130, y);
+
+    y += 5;
+    //desenhar ma linha
+    doc.setLineWidth(0.5);
+    doc.line(10, y, 200, y); //(10(inicio)______________()200)
+
+    //====================================================
+    //          configuraçao do documento pdf --fim--
+    //====================================================
+
+    //====================================================
+    //          obter a listagem de clientes (ordem alfabetica)
+    //====================================================
+
+    const clientes = await clientModel.find().sort({ nome: 1 });
+    //teste de recebimento
+    //console.log(clientes)
+    //popular o documento pdf com os lcientes cadastrados
+
+    y += 10;
+    clientes.forEach((c) => {
+      if (y > 280) {
+        doc.addPage();
+        y = 20;
+        doc.text("Nome", 14, y);
+        doc.text("Telefone", 85, y);
+        doc.text("E-mail", 130, y);
+      }
+
+      doc.text(c.nome, 14, y);
+      doc.text(c.telefone, 85, y);
+      doc.text(c.gmail, 130, y);
+      y += 10;
+    });
+
+    //====================================================
+    //          obter a listagem de clientes  --fim--
+    //====================================================
+
+
+
+
+
+      //====================================================
+    //          obter a listagem de paginas  
+    //====================================================
+
+const pages = doc.internal.getNumberOfPages()
+for (let i = 1; i<=pages; i++) {
+  doc.setPage(i)
+  doc.setFontSize(10)
+  doc.text(`Pagina ${i} de ${pages}`, 105, 290, {align: 'center'})
+
+}
+
+
+    
+      //====================================================
+    //          obter a listagem de paginas  --fim--
+    //====================================================
+
+
+
+
+
+
+
+    //====================================================
+    //       abrir o arquivo no sistema operacional
+    //====================================================
+    // Definir o caminho do arquivo temporário e nome do arquivo com extensao .pdf
+    const tempDir = app.getPath("temp");
+    const filePath = path.join(tempDir, "clientes.pdf");
+    // salvar temporariamente o arquivo
+    doc.save(filePath);
+    // abrir o arquivo no aplicativo padrão de leitura de pdf do computador do usuário
+    shell.openPath(filePath);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+//=================================================
+// relatorio de clientes fim ======================

@@ -1,5 +1,7 @@
 //const {cadastroWindow} = require('../../main')
 
+btnCreate.disabled = true
+
 const foco = document.getElementById("buscarCli");
 document.addEventListener("DOMContentLoaded", () => {
   //barra na busca do cliente
@@ -15,17 +17,19 @@ function resetForm() {
 }
 
 function resetCpf() {
-  cadCpf.reload();
+  const cpfFoco = document.getElementById("cadCpf");
+  cpfFoco.focus()
+  cpfFoco.value = ""
+
+ 
 }
 
-api.resetCpf((args)=>{
-    resetCpf()
-})
+api.resetCpf((args) => {
+  resetCpf();
+} );
 
 //uso da api para resetar quando salvar, editar, sair e excluir um cliente
-api.resetForm((args) => {
-  resetForm();
-});
+api.resetForm((args) => {});
 
 function buscarEndereco() {
   let cep = document.getElementById("cadCep").value;
@@ -76,8 +80,11 @@ function testaCPF() {
   let cpfNotificacao = document.getElementById("cpfNotificacao");
   if (!validaCPF(inputCPF.value)) {
     cpfNotificacao.style.display = "block"; // Mostra o popup
+    btnCreate.disabled = true
+    
   } else {
     cpfNotificacao.style.display = "none"; // Esconde o popup
+    btnCreate.disabled = false
   }
 }
 
