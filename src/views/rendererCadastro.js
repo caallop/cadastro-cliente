@@ -1,6 +1,22 @@
 //const {cadastroWindow} = require('../../main')
 
-btnCreate.disabled = true
+//fluxo
+let frmCadastro = document.getElementById("frmCadastro");
+//abaixo os let('S) com os campos (nome, idade...) com os id's que deve ser colocado em cada linha do html cadastro, exemplo em notes do sticky notes.
+//====
+let cadEmail = document.getElementById("cadEmail");
+let cadTel = document.getElementById("cadTel");
+let cadNome = document.getElementById("cadNome");
+let cadCpf = document.getElementById("cadCpf");
+let cadSexo = document.getElementById("cadSexo");
+let cadCep = document.getElementById("cadCep");
+let cadBairro = document.getElementById("cadBairro");
+let cadNumb = document.getElementById("cadNumb");
+let cadComp = document.getElementById("cadComp");
+let cadUf = document.getElementById("cadUf");
+let cadCid = document.getElementById("cadCid");
+
+//btnCreate.disabled = true;
 
 const foco = document.getElementById("buscarCli");
 document.addEventListener("DOMContentLoaded", () => {
@@ -18,15 +34,13 @@ function resetForm() {
 
 function resetCpf() {
   const cpfFoco = document.getElementById("cadCpf");
-  cpfFoco.focus()
-  cpfFoco.value = ""
-
- 
+  cpfFoco.focus();
+  cpfFoco.value = "";
 }
 
 api.resetCpf((args) => {
   resetCpf();
-} );
+});
 
 //uso da api para resetar quando salvar, editar, sair e excluir um cliente
 api.resetForm((args) => {});
@@ -80,29 +94,17 @@ function testaCPF() {
   let cpfNotificacao = document.getElementById("cpfNotificacao");
   if (!validaCPF(inputCPF.value)) {
     cpfNotificacao.style.display = "block"; // Mostra o popup
-    btnCreate.disabled = true
-    
+    //btnCreate.disabled = true;
+
+    cadCpf.classList.remove("is-valid");
+    cadCpf.classList.add("is-invalid");
   } else {
     cpfNotificacao.style.display = "none"; // Esconde o popup
-    btnCreate.disabled = false
+    //btnCreate.disabled = false;
+    cadCpf.classList.remove("is-invalid");
+    cadCpf.classList.add("is-valid");
   }
 }
-
-//fluxo
-let frmCadastro = document.getElementById("frmCadastro");
-//abaixo os let('S) com os campos (nome, idade...) com os id's que deve ser colocado em cada linha do html cadastro, exemplo em notes do sticky notes.
-//====
-let cadEmail = document.getElementById("cadEmail");
-let cadTel = document.getElementById("cadTel");
-let cadNome = document.getElementById("cadNome");
-let cadCpf = document.getElementById("cadCpf");
-let cadSexo = document.getElementById("cadSexo");
-let cadCep = document.getElementById("cadCep");
-let cadBairro = document.getElementById("cadBairro");
-let cadNumb = document.getElementById("cadNumb");
-let cadComp = document.getElementById("cadComp");
-let cadUf = document.getElementById("cadUf");
-let cadCid = document.getElementById("cadCid");
 
 //====
 
