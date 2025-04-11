@@ -17,4 +17,6 @@ contextBridge.exposeInMainWorld("api", {
   cadastroBanco: (cadastroCliente) => ipcRenderer.send("cadastrar-cliente", cadastroCliente),
   resetCpf: (args) => ipcRenderer.on("reset-Cpf", args),
   resetForm: (args) => ipcRenderer.on("reset-form", args),
+  searchName: (nomeCli) => ipcRenderer.send('search-name', nomeCli),
+  renderClient: (client) => ipcRenderer.on('render-client', client)
 });

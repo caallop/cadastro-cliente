@@ -44,6 +44,9 @@ const clientSchema = new Schema(
     cidade: {
       type: String,
     },
+    logradouro: {
+    type: String,
+    },
   },
   { versionKey: false }
 );

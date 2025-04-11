@@ -56,6 +56,22 @@ footer p {
   margin-right: 11px;
 }
 
+#buscarCli{
+  position: fixed;
+  margin-top: 20px;
+  width: 740px;
+
+}
+
+#buscar{
+  width: 80px;
+  height: 40px;
+  left: 10px;
+  margin: 10px;
+  margin-top: -2px;
+}
+
+
 /*
 .localizaçao {
  

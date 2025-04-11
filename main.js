@@ -225,6 +225,7 @@ ipcMain.on("cadastrar-cliente", async (event, cadastroCliente) => {
       complemento: cadastroCliente.compCli,
       estado: cadastroCliente.ufCli,
       cidade: cadastroCliente.cidCli,
+      logradouro: cadastroCliente.lograCli,
     });
     await newClient.save();
     //confirmaçao do cliente adicionado ao banco (uso do dialog)
@@ -371,3 +372,30 @@ for (let i = 1; i<=pages; i++) {
 
 //=================================================
 // relatorio de clientes fim ======================
+
+
+
+
+
+//================================================================================
+//=========================== CRUD READ- INICIO ==================================
+ipcMain.on('search-name', async(event ,nomeCli) =>{
+  //teste do recebimento entre arquivos
+  console.log(nomeCli)
+  try {
+    const client = await clientModel.find({
+      //RegExp (expressão regular ''i' -> insensitive (ignorar letras maisculas e minusculas))
+      nome: new RegExp(nomeCli, 'i')
+    })
+    console.log(client)
+    //Mandar para os clientes para o renderClientes
+    event.reply('render-client', JSON.stringify(client))
+  } catch (error) {
+    console.log(error)
+  }
+})
+
+
+
+//=========================== CRUD READ- FIM =====================================
+//================================================================================

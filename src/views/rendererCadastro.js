@@ -15,10 +15,15 @@ let cadNumb = document.getElementById("cadNumb");
 let cadComp = document.getElementById("cadComp");
 let cadUf = document.getElementById("cadUf");
 let cadCid = document.getElementById("cadCid");
+let cadLogra = document.getElementById("cadLogra");
 
 //btnCreate.disabled = true;
 
 const foco = document.getElementById("buscarCli");
+
+//criar um vetor global para manipular os dados do cliente
+let arrayClient = [];
+
 document.addEventListener("DOMContentLoaded", () => {
   //barra na busca do cliente
   foco.focus();
@@ -130,8 +135,48 @@ frmCadastro.addEventListener("submit", async (event) => {
     compCli: cadComp.value,
     ufCli: cadUf.value,
     cidCli: cadCid.value,
+    lograCli: cadLogra.value,
   };
   api.cadastroBanco(cadastroCliente);
 });
 
 //crud create - fim
+
+//================================================================================
+//=========================== CRUD READ- INICIO ==================================
+
+function searchClient() {
+  //console.log("teste do botão buscar");
+  //passo 1 - pega os nome pra buscar
+  let nomeCli = document.getElementById("buscarCli").value;
+  console.log(nomeCli);
+  //passo 2 - mandar o nome para o main
+  api.searchName(nomeCli);
+  //receber os nomes do clientes por vetor do main que pegou DO BANCO DE DADOS.
+  api.renderClient((event, client) => {
+    console.log("teste");
+    console.log(client);
+
+    //passo 6- cobverter os dados de string para json. renderizaçao dos dados para o html
+    const clientData = JSON.parse(client);
+    arrayClient = clientData;
+    //uso do laço foreach para percorrer o vetor e extrair os dados
+    arrayClient.forEach((c) => {
+      cadNome.value = c.nome;
+      cadEmail.value = c.gmail;
+      cadTel.value = c.telefone;
+      cadCpf.value = c.cpf;
+      cadSexo.value = c.sexo;
+      cadCep.value = c.cep;
+      cadBairro.value = c.bairro;
+      cadNumb.value = c.numero;
+      cadComp.value = c.complemento;
+      cadUf.value = c.estado;
+      cadCid.value = c.cidade;
+      cadLogra.value = c.logradouro;
+    });
+  });
+}
+
+//=========================== CRUD READ- FIM =====================================
+//================================================================================
