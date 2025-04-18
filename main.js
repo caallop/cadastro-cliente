@@ -390,7 +390,7 @@ ipcMain.on("search-cpf", async (event, cpfCli) => {
       })  .then((result) => {
           if (result.response === 0) {
             //enviar ao cliente um pedido para copiar o nome do ususario do cliente no campo de bvusca para o campo nome (evitar que o usuario tenha que idigitar novamente o nome)
-            event.reply("set-name");
+            event.reply("set-cpf");
           } else {
             //enviar ao renderer cliente, um pedido para limpar os campos
             event.reply("reset-form");
