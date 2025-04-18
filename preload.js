@@ -23,4 +23,5 @@ contextBridge.exposeInMainWorld("api", {
   setName: (args) => ipcRenderer.on('set-name', args),
   searchCpf:(cpfCli) => ipcRenderer.send('search-cpf', cpfCli),
   renderCpf:(clientCPF) => ipcRenderer.on("render-clientCPF", clientCPF)
+  setCpf:(args) => ipcRenderer.on('set-cpf', args),
 });
