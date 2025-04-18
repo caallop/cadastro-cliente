@@ -210,7 +210,7 @@ const template = [
 module.exports = { cadastroWindow };
 
 ipcMain.on("cadastrar-cliente", async (event, cadastroCliente) => {
-  console.log(cadastroCliente);
+  //console.log(cadastroCliente);
 
   try {
     const newClient = clientModel({
@@ -330,30 +330,19 @@ async function relatorioClientes() {
     //          obter a listagem de clientes  --fim--
     //====================================================
 
-
-
-
-
-      //====================================================
-    //          obter a listagem de paginas  
+    //====================================================
+    //          obter a listagem de paginas
     //====================================================
 
-const pages = doc.internal.getNumberOfPages()
-for (let i = 1; i<=pages; i++) {
-  doc.setPage(i)
-  doc.setFontSize(10)
-  doc.text(`Pagina ${i} de ${pages}`, 105, 290, {align: 'center'})
-
-}
-      //====================================================
+    const pages = doc.internal.getNumberOfPages();
+    for (let i = 1; i <= pages; i++) {
+      doc.setPage(i);
+      doc.setFontSize(10);
+      doc.text(`Pagina ${i} de ${pages}`, 105, 290, { align: "center" });
+    }
+    //====================================================
     //          obter a listagem de paginas  --fim--
     //====================================================
-
-
-
-
-
-
 
     //====================================================
     //       abrir o arquivo no sistema operacional
@@ -373,29 +362,92 @@ for (let i = 1; i<=pages; i++) {
 //=================================================
 // relatorio de clientes fim ======================
 
-
-
-
-
 //================================================================================
 //=========================== CRUD READ- INICIO ==================================
-ipcMain.on('search-name', async(event ,nomeCli) =>{
+//validaçao da busca
+ipcMain.on("validar-busca", () => {
+  dialog.showMessageBox({
+    type: "warning",
+    title: "Atenção",
+    message: "preencha o campo de busca",
+    buttons: ["OK"],
+  });
+});
+ipcMain.on("search-cpf", async (event, cpfCli) => {
+  console.log("entrou na busca de cpf");
+  try {
+    const clientCPF = await clientModel.find({
+      cpf: new RegExp(cpfCli),
+    });
+    console.log(clientCPF);
+
+    if (clientCPF.length === 0) {
+      dialog.showMessageBox({
+        type: "warning",
+        title: " Busca CPF",
+        message: "Cliente não cadastrado.",
+        buttons: ["OK"], 
+      })  .then((result) => {
+          if (result.response === 0) {
+            //enviar ao cliente um pedido para copiar o nome do ususario do cliente no campo de bvusca para o campo nome (evitar que o usuario tenha que idigitar novamente o nome)
+            event.reply("set-name");
+          } else {
+            //enviar ao renderer cliente, um pedido para limpar os campos
+            event.reply("reset-form");
+          }
+//=======================================================================
+//=======================================================================
+//=======================================================================
+//=======================================================================
+        });
+    } else {
+      event.reply("render-clientCPF", JSON.stringify(clientCPF));
+    }
+    
+  } catch (error) {
+    console.log(error);
+  }
+
+
+});
+ipcMain.on("search-name", async (event, nomeCli) => {
   //teste do recebimento entre arquivos
-  console.log(nomeCli)
+  console.log(nomeCli);
   try {
     const client = await clientModel.find({
       //RegExp (expressão regular ''i' -> insensitive (ignorar letras maisculas e minusculas))
-      nome: new RegExp(nomeCli, 'i')
-    })
-    console.log(client)
-    //Mandar para os clientes para o renderClientes
-    event.reply('render-client', JSON.stringify(client))
+      nome: new RegExp(nomeCli, "i"),
+    });
+    console.log(client);
+    //melhoriar da experiencia do usuaario (se nao existir um cliente cadastrado enviar uma mensagem ao usuario questionando se ele deseja cadastrar um novo cliente)
+    //se o vetor esiver vazio (lenght) fala o tamanho do vetor
+    if (client.length === 0) {
+      //questionar o usuario...
+      dialog
+        .showMessageBox({
+          type: "question",
+          title: " Clientes",
+          message: "Cliente não cadastrado. \n Deseja cadastrar este cliente?",
+          defaultId: 0, //
+          buttons: ["Sim", "Não"], // [0,1] DEFAULTID esta associado ao sim, enquanto o não esta associado ao não (quando apertar enter ja vai no sim)
+        })
+        .then((result) => {
+          if (result.response === 0) {
+            //enviar ao cliente um pedido para copiar o nome do ususario do cliente no campo de bvusca para o campo nome (evitar que o usuario tenha que idigitar novamente o nome)
+            event.reply("set-name");
+          } else {
+            //enviar ao renderer cliente, um pedido para limpar os campos
+            event.reply("reset-form");
+          }
+        });
+    } else {
+      //Mandar para os clientes para o renderClientes
+      event.reply("render-client", JSON.stringify(client));
+    }
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
-})
-
-
+});
 
 //=========================== CRUD READ- FIM =====================================
 //================================================================================

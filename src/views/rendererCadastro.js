@@ -17,7 +17,7 @@ let cadUf = document.getElementById("cadUf");
 let cadCid = document.getElementById("cadCid");
 let cadLogra = document.getElementById("cadLogra");
 
-//btnCreate.disabled = true;
+btnCreate.disabled = true;
 
 const foco = document.getElementById("buscarCli");
 
@@ -48,7 +48,9 @@ api.resetCpf((args) => {
 });
 
 //uso da api para resetar quando salvar, editar, sair e excluir um cliente
-api.resetForm((args) => {});
+api.resetForm((args) => {
+  resetForm();
+});
 
 function buscarEndereco() {
   let cep = document.getElementById("cadCep").value;
@@ -99,13 +101,13 @@ function testaCPF() {
   let cpfNotificacao = document.getElementById("cpfNotificacao");
   if (!validaCPF(inputCPF.value)) {
     cpfNotificacao.style.display = "block"; // Mostra o popup
-    //btnCreate.disabled = true;
+    btnCreate.disabled = true;
 
     cadCpf.classList.remove("is-valid");
     cadCpf.classList.add("is-invalid");
   } else {
     cpfNotificacao.style.display = "none"; // Esconde o popup
-    //btnCreate.disabled = false;
+    btnCreate.disabled = false;
     cadCpf.classList.remove("is-invalid");
     cadCpf.classList.add("is-valid");
   }
@@ -145,38 +147,85 @@ frmCadastro.addEventListener("submit", async (event) => {
 //================================================================================
 //=========================== CRUD READ- INICIO ==================================
 
+//setar o noem do cliente para fazer um novo cadastro se a vbusca retornar que o cliente deseja cadastras um novo cliente ocm o alert
+api.setName((args) => {
+  console.log(
+    "meu deus meu senhor me ajdua por favor é no trabalaho na esocla ou faukdad"
+  );
+  // "recortar" o nome da busca e salovar e setar o nome do form
+  let busca = document.getElementById("buscarCli").value;
+  //focar no campo nome
+  cadNome.focus();
+  //copiar o nome do cliente para o campo nome
+  cadNome.value = busca;
+  //limpar o campo de busca
+
+  // foco.value = "";
+});
+
 function searchClient() {
   //console.log("teste do botão buscar");
   //passo 1 - pega os nome pra buscar
   let nomeCli = document.getElementById("buscarCli").value;
-  console.log(nomeCli);
-  //passo 2 - mandar o nome para o main
-  api.searchName(nomeCli);
-  //receber os nomes do clientes por vetor do main que pegou DO BANCO DE DADOS.
-  api.renderClient((event, client) => {
-    console.log("teste");
-    console.log(client);
-
-    //passo 6- cobverter os dados de string para json. renderizaçao dos dados para o html
-    const clientData = JSON.parse(client);
-    arrayClient = clientData;
-    //uso do laço foreach para percorrer o vetor e extrair os dados
-    arrayClient.forEach((c) => {
-      cadNome.value = c.nome;
-      cadEmail.value = c.gmail;
-      cadTel.value = c.telefone;
-      cadCpf.value = c.cpf;
-      cadSexo.value = c.sexo;
-      cadCep.value = c.cep;
-      cadBairro.value = c.bairro;
-      cadNumb.value = c.numero;
-      cadComp.value = c.complemento;
-      cadUf.value = c.estado;
-      cadCid.value = c.cidade;
-      cadLogra.value = c.logradouro;
+  let cpfCli = document.getElementById("buscarCli").value;
+  const temNumero = /\d+/.test(foco.value);
+  console.log(`${temNumero} acho que ta certo `);
+  if (temNumero === "") {
+    //enviar ao main um pedido para alertar o usuario
+    api.validarBusca();
+  }
+  if (temNumero === true) {
+    
+    console.log("teste 123213");
+    api.searchCpf(cpfCli);
+    api.renderCpf((event, clientCPF) => {
+      console.log("chegou o cpf do cliente aq no renderer dnv");
+      console.log(clientCPF);
+      const clientDataCPF = JSON.parse(clientCPF);
+      arrayClient = clientDataCPF;
+      //uso do laço foreach para percorrer o vetor e extrair os dados
+      arrayClient.forEach((c) => {
+        cadNome.value = c.nome;
+        cadEmail.value = c.gmail;
+        cadTel.value = c.telefone;
+        cadCpf.value = c.cpf;
+        cadSexo.value = c.sexo;
+        cadCep.value = c.cep;
+        cadBairro.value = c.bairro;
+        cadNumb.value = c.numero;
+        cadComp.value = c.complemento;
+        cadUf.value = c.estado;
+        cadCid.value = c.cidade;
+        cadLogra.value = c.logradouro;
+      });
     });
-  });
-}
 
+  } else {
+    api.searchName(nomeCli);
+    api.renderClient((event, client) => {
+      console.log("teste");
+      console.log(client);
+
+      //passo 6- cobverter os dados de string para json. renderizaçao dos dados para o html
+      const clientData = JSON.parse(client);
+      arrayClient = clientData;
+      //uso do laço foreach para percorrer o vetor e extrair os dados
+      arrayClient.forEach((c) => {
+        cadNome.value = c.nome;
+        cadEmail.value = c.gmail;
+        cadTel.value = c.telefone;
+        cadCpf.value = c.cpf;
+        cadSexo.value = c.sexo;
+        cadCep.value = c.cep;
+        cadBairro.value = c.bairro;
+        cadNumb.value = c.numero;
+        cadComp.value = c.complemento;
+        cadUf.value = c.estado;
+        cadCid.value = c.cidade;
+        cadLogra.value = c.logradouro;
+      });
+    });
+  }
+}
 //=========================== CRUD READ- FIM =====================================
 //================================================================================
