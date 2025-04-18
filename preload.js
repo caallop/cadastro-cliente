@@ -22,6 +22,6 @@ contextBridge.exposeInMainWorld("api", {
   validarBusca: () => ipcRenderer.send('validar-busca'),
   setName: (args) => ipcRenderer.on('set-name', args),
   searchCpf:(cpfCli) => ipcRenderer.send('search-cpf', cpfCli),
-  renderCpf:(clientCPF) => ipcRenderer.on("render-clientCPF", clientCPF)
+  renderCpf:(clientCPF) => ipcRenderer.on("render-clientCPF", clientCPF),
   setCpf:(args) => ipcRenderer.on('set-cpf', args),
 });
