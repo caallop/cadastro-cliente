@@ -160,7 +160,24 @@ api.setName((args) => {
   cadNome.value = busca;
   //limpar o campo de busca
 
-  // foco.value = "";
+  foco.value = "";
+});
+//=====================================================================================================================
+api.setCpf((args) => {
+  console.log(
+    "meu deus meu senhor me ajdua por favor é no trabalaho na esocla ou faukdad"
+  );
+  // "recortar" o nome da busca e salovar e setar o nome do form
+  let busca = document.getElementById("buscarCli").value;
+  //focar no campo nome
+  cadCpf.focus();
+  //copiar o nome do cliente para o campo nome
+  cadCpf.value = busca
+  console.log(busca)
+  //limpar o campo de busca
+
+  foco.value = "";
+
 });
 
 function searchClient() {
@@ -175,7 +192,7 @@ function searchClient() {
     api.validarBusca();
   }
   if (temNumero === true) {
-    
+
     console.log("teste 123213");
     api.searchCpf(cpfCli);
     api.renderCpf((event, clientCPF) => {
