@@ -374,7 +374,6 @@ ipcMain.on("validar-busca", () => {
   });
 });
 
-
 ipcMain.on("search-cpf", async (event, cpfCli) => {
   try {
     const clientCPF = await clientModel.find({
@@ -383,13 +382,14 @@ ipcMain.on("search-cpf", async (event, cpfCli) => {
     console.log(clientCPF);
 
     if (clientCPF.length === 0) {
-      dialog.showMessageBox({
-        type: "warning",
-        title: " Busca CPF",
-        message: "Cliente não cadastrado. \n Deseja cadastrar este cliente?",
-        defaultId: 0, //
-        buttons: ["Sim", "Não"], // [0,1] DEFAULTID esta associado ao sim, enquanto o não esta associado ao não (quando apertar enter ja vai no sim)
-      })
+      dialog
+        .showMessageBox({
+          type: "warning",
+          title: " Busca CPF",
+          message: "Cliente não cadastrado. \n Deseja cadastrar este cliente?",
+          defaultId: 0, //
+          buttons: ["Sim", "Não"], // [0,1] DEFAULTID esta associado ao sim, enquanto o não esta associado ao não (quando apertar enter ja vai no sim)
+        })
         .then((result) => {
           if (result.response === 0) {
             //enviar ao cliente um pedido para copiar o nome do ususario do cliente no campo de bvusca para o campo nome (evitar que o usuario tenha que idigitar novamente o nome)
@@ -402,12 +402,9 @@ ipcMain.on("search-cpf", async (event, cpfCli) => {
     } else {
       event.reply("render-clientCPF", JSON.stringify(clientCPF));
     }
-
   } catch (error) {
     console.log(error);
   }
-
-
 });
 ipcMain.on("search-name", async (event, nomeCli) => {
   //teste do recebimento entre arquivos

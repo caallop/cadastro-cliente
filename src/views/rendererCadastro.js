@@ -4,6 +4,7 @@
 let frmCadastro = document.getElementById("frmCadastro");
 //abaixo os let('S) com os campos (nome, idade...) com os id's que deve ser colocado em cada linha do html cadastro, exemplo em notes do sticky notes.
 //====
+let frmSearchClient = document.getElementById("frmSearchClient");
 let cadEmail = document.getElementById("cadEmail");
 let cadTel = document.getElementById("cadTel");
 let cadNome = document.getElementById("cadNome");
@@ -17,8 +18,6 @@ let cadUf = document.getElementById("cadUf");
 let cadCid = document.getElementById("cadCid");
 let cadLogra = document.getElementById("cadLogra");
 
-btnCreate.disabled = true;
-
 const foco = document.getElementById("buscarCli");
 
 //criar um vetor global para manipular os dados do cliente
@@ -28,6 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
   //barra na busca do cliente
   foco.focus();
   //desativar os botoes
+  btnCreate.disabled = false;
   btnUpdate.disabled = true;
   btnDelete.disabled = true;
 });
@@ -101,13 +101,11 @@ function testaCPF() {
   let cpfNotificacao = document.getElementById("cpfNotificacao");
   if (!validaCPF(inputCPF.value)) {
     cpfNotificacao.style.display = "block"; // Mostra o popup
-    btnCreate.disabled = true;
 
     cadCpf.classList.remove("is-valid");
     cadCpf.classList.add("is-invalid");
   } else {
     cpfNotificacao.style.display = "none"; // Esconde o popup
-    btnCreate.disabled = false;
     cadCpf.classList.remove("is-invalid");
     cadCpf.classList.add("is-valid");
   }
@@ -145,9 +143,30 @@ frmCadastro.addEventListener("submit", async (event) => {
 //crud create - fim
 
 //================================================================================
+//======================= MANIPULAÇAO DO BOTAO ENTER =============================
+function teclaEnter(event) {
+  if (event.key === "Enter") {
+    event.preventDefault();
+    searchClient();
+  }
+}
+
+frmSearchClient.addEventListener("keydown", teclaEnter);
+
+function restaurarEnter() {
+  frmSearchClient.removeEventListener("keydown", teclaEnter);
+}
+//======================= MANIPULAÇAO DO BOTAO ENTER =============================
+//================================================================================
+
+//================================================================================
 //=========================== CRUD READ- INICIO ==================================
 
 //setar o noem do cliente para fazer um novo cadastro se a vbusca retornar que o cliente deseja cadastras um novo cliente ocm o alert
+
+
+
+
 api.setName((args) => {
   console.log(
     "meu deus meu senhor me ajdua por favor é no trabalaho na esocla ou faukdad"
@@ -157,7 +176,7 @@ api.setName((args) => {
   //focar no campo nome
   cadNome.focus();
   //copiar o nome do cliente para o campo nome
-  cadNome.value = busca;
+  cadNome.value = foco.value;
   //limpar o campo de busca
 
   foco.value = "";
@@ -171,14 +190,21 @@ api.setCpf((args) => {
   let busca = document.getElementById("buscarCli").value;
   //focar no campo nome
   cadCpf.focus();
-  //copiar o nome do cliente para o campo nome
-  cadCpf.value = busca
   console.log(busca)
+let valorBusca =  foco.value
+console.log(valorBusca)
+resetForm()
+  //copiar o nome do cliente para o campo nome
+  cadCpf.value = foco.value;
+  console.log(valorBusca);
   //limpar o campo de busca
 
   foco.value = "";
-
 });
+
+
+
+
 
 function searchClient() {
   //console.log("teste do botão buscar");
@@ -192,7 +218,6 @@ function searchClient() {
     api.validarBusca();
   }
   if (temNumero === true) {
-
     console.log("teste 123213");
     api.searchCpf(cpfCli);
     api.renderCpf((event, clientCPF) => {
@@ -214,9 +239,12 @@ function searchClient() {
         cadUf.value = c.estado;
         cadCid.value = c.cidade;
         cadLogra.value = c.logradouro;
+        restaurarEnter();
+        btnCreate.disabled = true;
+        btnDelete.disabled = false;
+        btnUpdate.disabled = false;
       });
     });
-
   } else {
     api.searchName(nomeCli);
     api.renderClient((event, client) => {
