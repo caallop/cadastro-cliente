@@ -191,9 +191,9 @@ api.setCpf((args) => {
   //focar no campo nome
   cadCpf.focus();
   console.log(busca)
-let valorBusca =  foco.value
-console.log(valorBusca)
-resetForm()
+  let valorBusca = foco.value
+  console.log(valorBusca)
+  resetForm()
   //copiar o nome do cliente para o campo nome
   cadCpf.value = foco.value;
   console.log(valorBusca);
@@ -213,11 +213,10 @@ function searchClient() {
   let cpfCli = document.getElementById("buscarCli").value;
   const temNumero = /\d+/.test(foco.value);
   console.log(`${temNumero} acho que ta certo `);
-  if (temNumero === "") {
+  if (nomeCli === "") {
     //enviar ao main um pedido para alertar o usuario
     api.validarBusca();
-  }
-  if (temNumero === true) {
+  } else if (temNumero === true) {
     console.log("teste 123213");
     api.searchCpf(cpfCli);
     api.renderCpf((event, clientCPF) => {
@@ -274,3 +273,4 @@ function searchClient() {
 }
 //=========================== CRUD READ- FIM =====================================
 //================================================================================
+//botao forms

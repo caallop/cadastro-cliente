@@ -237,7 +237,6 @@ ipcMain.on("cadastrar-cliente", async (event, cadastroCliente) => {
         buttons: ["OK"],
       })
       .then((result) => {
-        console.log(error);
         if (result.response === 0) {
           event.reply("reset-form");
         }
@@ -258,6 +257,7 @@ ipcMain.on("cadastrar-cliente", async (event, cadastroCliente) => {
         });
     } else {
       console.log(error);
+  
     }
   }
 });
