@@ -213,11 +213,10 @@ function searchClient() {
   let cpfCli = document.getElementById("buscarCli").value;
   const temNumero = /\d+/.test(foco.value);
   console.log(`${temNumero} acho que ta certo `);
-  if (temNumero === "") {
+  if (foco.value === "") {
     //enviar ao main um pedido para alertar o usuario
     api.validarBusca();
-  }
-  if (temNumero === true) {
+  } else if (temNumero === true) {
     console.log("teste 123213");
     api.searchCpf(cpfCli);
     api.renderCpf((event, clientCPF) => {
@@ -239,6 +238,7 @@ function searchClient() {
         cadUf.value = c.estado;
         cadCid.value = c.cidade;
         cadLogra.value = c.logradouro;
+
         restaurarEnter();
         btnCreate.disabled = true;
         btnDelete.disabled = false;
