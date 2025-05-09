@@ -17,6 +17,7 @@ let cadComp = document.getElementById("cadComp");
 let cadUf = document.getElementById("cadUf");
 let cadCid = document.getElementById("cadCid");
 let cadLogra = document.getElementById("cadLogra");
+let IdCliente = document.getElementById("id");
 
 const foco = document.getElementById("buscarCli");
 
@@ -116,28 +117,49 @@ function testaCPF() {
 //crud create - inicio
 frmCadastro.addEventListener("submit", async (event) => {
   event.preventDefault();
-  console.log(
-    cadEmail.value,
-    cadTel.value,
-    cadNome.value,
-    cadCpf.value,
-    cadSexo.value
-  );
-  const cadastroCliente = {
-    gmailCli: cadEmail.value,
-    telCli: cadTel.value,
-    cpfCli: cadCpf.value,
-    nomeCli: cadNome.value,
-    sexoCli: cadSexo.value,
-    cepCli: cadCep.value,
-    bairroCli: cadBairro.value,
-    numCli: cadNumb.value,
-    compCli: cadComp.value,
-    ufCli: cadUf.value,
-    cidCli: cadCid.value,
-    lograCli: cadLogra.value,
-  };
-  api.cadastroBanco(cadastroCliente);
+
+  //estrategia para usar o submit para cadastras um novo cliente ou editar os dados de um cliente já existente
+  //verificar a existencia do cliente
+  if (IdCliente.value === "") {
+    //cadastrar um novo cliente
+    const cadastroCliente = {
+      gmailCli: cadEmail.value,
+      telCli: cadTel.value,
+      cpfCli: cadCpf.value,
+      nomeCli: cadNome.value,
+      sexoCli: cadSexo.value,
+      cepCli: cadCep.value,
+      bairroCli: cadBairro.value,
+      numCli: cadNumb.value,
+      compCli: cadComp.value,
+      ufCli: cadUf.value,
+      cidCli: cadCid.value,
+      lograCli: cadLogra.value,
+    };
+    api.cadastroBanco(cadastroCliente);
+  } else {
+    //alterar os dados de um cliente existente
+    const cadastroCliente = {
+      idCli: IdCliente.value,
+      gmailCli: cadEmail.value,
+      telCli: cadTel.value,
+      cpfCli: cadCpf.value,
+      nomeCli: cadNome.value,
+      sexoCli: cadSexo.value,
+      cepCli: cadCep.value,
+      bairroCli: cadBairro.value,
+      numCli: cadNumb.value,
+      compCli: cadComp.value,
+      ufCli: cadUf.value,
+      cidCli: cadCid.value,
+      lograCli: cadLogra.value,
+
+    
+    };
+      //mandar o cliente pro birigubeigos
+      
+    api.updateClient(cadastroCliente)
+  }
 });
 
 //crud create - fim
@@ -153,6 +175,7 @@ function teclaEnter(event) {
 
 frmSearchClient.addEventListener("keydown", teclaEnter);
 
+
 function restaurarEnter() {
   frmSearchClient.removeEventListener("keydown", teclaEnter);
 }
@@ -163,9 +186,6 @@ function restaurarEnter() {
 //=========================== CRUD READ- INICIO ==================================
 
 //setar o noem do cliente para fazer um novo cadastro se a vbusca retornar que o cliente deseja cadastras um novo cliente ocm o alert
-
-
-
 
 api.setName((args) => {
   console.log(
@@ -190,10 +210,9 @@ api.setCpf((args) => {
   let busca = document.getElementById("buscarCli").value;
   //focar no campo nome
   cadCpf.focus();
-  console.log(busca)
-let valorBusca =  foco.value
-console.log(valorBusca)
-resetForm()
+  console.log(busca);
+  let valorBusca = foco.value;
+  console.log(valorBusca);
   //copiar o nome do cliente para o campo nome
   cadCpf.value = foco.value;
   console.log(valorBusca);
@@ -201,10 +220,6 @@ resetForm()
 
   foco.value = "";
 });
-
-
-
-
 
 function searchClient() {
   //console.log("teste do botão buscar");
@@ -226,6 +241,7 @@ function searchClient() {
       arrayClient = clientDataCPF;
       //uso do laço foreach para percorrer o vetor e extrair os dados
       arrayClient.forEach((c) => {
+        IdCliente.value = c._id;
         cadNome.value = c.nome;
         cadEmail.value = c.gmail;
         cadTel.value = c.telefone;
@@ -256,6 +272,7 @@ function searchClient() {
       arrayClient = clientData;
       //uso do laço foreach para percorrer o vetor e extrair os dados
       arrayClient.forEach((c) => {
+        IdCliente.value = c._id;
         cadNome.value = c.nome;
         cadEmail.value = c.gmail;
         cadTel.value = c.telefone;
@@ -268,9 +285,25 @@ function searchClient() {
         cadUf.value = c.estado;
         cadCid.value = c.cidade;
         cadLogra.value = c.logradouro;
+        restaurarEnter();
+        btnCreate.disabled = true;
+        btnDelete.disabled = false;
+        btnUpdate.disabled = false;
       });
     });
   }
 }
 //=========================== CRUD READ- FIM =====================================
 //================================================================================
+
+//================================================================================
+//=========================== CRUD DELETE- FIM ===================================
+function removeClient() {
+  //console.log("teste1")
+  //recebimento e envio do id para o main
+  api.deleteClient(IdCliente.value);
+}
+
+//=========================== CRUD DELETE- FIM ===================================
+//================================================================================
+

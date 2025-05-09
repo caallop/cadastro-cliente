@@ -24,4 +24,6 @@ contextBridge.exposeInMainWorld("api", {
   searchCpf:(cpfCli) => ipcRenderer.send('search-cpf', cpfCli),
   renderCpf:(clientCPF) => ipcRenderer.on("render-clientCPF", clientCPF),
   setCpf:(args) => ipcRenderer.on('set-cpf', args),
+  deleteClient:(id) =>ipcRenderer.send('delete-client', id),
+  updateClient:(cadastroCliente) =>ipcRenderer.send('edit-client', cadastroCliente)
 });

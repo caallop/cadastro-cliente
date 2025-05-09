@@ -36,17 +36,8 @@ const createWindow = () => {
   let win;
   win = new BrowserWindow({
     //nativeTheme.themeSource = 'dark',
-    //1010
     width: 800,
-    //720 (exemplos para mexer na altura e largura)
     height: 600,
-    //fullscrean//dxa em tela cheia
-    // resizable: false, //mudar tamanho?
-    // minimizable: true, //minizavel?
-    //closable: true, //fechavel?
-    // fullscreen: false, //tela cheia?
-    // autoHideMenuBar: true, //menu bar escondida?
-    //frame: true, //tira TUDO
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
     },
@@ -237,7 +228,6 @@ ipcMain.on("cadastrar-cliente", async (event, cadastroCliente) => {
         buttons: ["OK"],
       })
       .then((result) => {
-        console.log(error);
         if (result.response === 0) {
           event.reply("reset-form");
         }
@@ -446,4 +436,91 @@ ipcMain.on("search-name", async (event, nomeCli) => {
 });
 
 //=========================== CRUD READ- FIM =====================================
+//================================================================================
+
+//================================================================================
+//=========================== CRUD DELETE- FIM ===================================
+ipcMain.on("delete-client", async (event, id) => {
+  const result = await dialog.showMessageBox(win, {
+    type: "warning",
+    title: "ATENÇÃO",
+    message:
+      "Cliente será apagado, tem certeza disto?. \n Esta ação não podera ser desfeita",
+    buttons: ["Cancelar", "Sim"], // [0,1] DEFAULTID esta associado ao Cancelar, enquanto o não esta associado ao não (quando apertar enter ja vai no sim)
+  });
+  console.log(result);
+  if (result.response === 1) {
+    try {
+      const deleteClient = await clientModel.findByIdAndDelete(id);
+      console.log("deletado");
+      event.reply("reset-form");
+    } catch (error) {
+      console.log(error);
+    }
+  }
+});
+//=========================== CRUD DELETE- FIM ===================================
+//================================================================================
+
+//================================================================================
+//=========================== CRUD EDIT- FIM =====================================
+
+ipcMain.on("edit-client", async (event, cadastroCliente) => {
+  //console.log(cadastroCliente);
+
+  try {
+    const updateClient =  await clientModel.findByIdAndUpdate(
+      cadastroCliente.idCli,
+      {
+      gmail: cadastroCliente.gmailCli,
+      telefone: cadastroCliente.telCli,
+      cpf: cadastroCliente.cpfCli,
+      nome: cadastroCliente.nomeCli,
+      sexo: cadastroCliente.sexoCli,
+      cep: cadastroCliente.cepCli,
+      bairro: cadastroCliente.bairroCli,
+      numero: cadastroCliente.numCli,
+      complemento: cadastroCliente.compCli,
+      estado: cadastroCliente.ufCli,
+      cidade: cadastroCliente.cidCli,
+      logradouro: cadastroCliente.lograCli,
+    },
+  {
+    new: true
+  }
+  );
+    //confirmaçao do cliente adicionado ao banco (uso do dialog)
+    dialog
+      .showMessageBox({
+        type: "info",
+        title: "aviso",
+        message: "cliente alterado com sucesso",
+        buttons: ["OK"],
+      })
+      .then((result) => {
+        if (result.response === 0) {
+          event.reply("reset-form");
+        }
+      });
+  } catch (error) {
+    if (error.code === 11000) {
+      dialog
+        .showMessageBox({
+          type: "error",
+          title: "CPF",
+          message: "CPF já cadastrado",
+          buttons: ["OK"],
+        })
+        .then((result) => {
+          if (result.response === 0) {
+            event.reply("reset-Cpf");
+          }
+        });
+    } else {
+      console.log(error);
+    }
+  }
+});
+
+//=========================== CRUD DELETE- FIM ===================================
 //================================================================================
