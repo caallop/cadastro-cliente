@@ -1,5 +1,3 @@
-console.log("electron processo principal");
-
 const {
   Menu,
   shell,
@@ -59,6 +57,28 @@ const createWindow = () => {
   win.loadFile("./src/views/index.html");
 };
 //inicializaçao da aplicaçao (assincronismo)
+
+function itensWindow() {
+  nativeTheme.themeSource = "light";
+  // Obter a janela principal
+  const mainWindow = BrowserWindow.getFocusedWindow();
+  //validação (se existir a janela principal)
+  if (mainWindow) {
+    about = new BrowserWindow({
+      width: 1020,
+      height: 580,
+      autoHideMenuBar: true,
+      resizable: false,
+      minimizable: false,
+      // Estabelecer uma relação hierarquica entre janelas
+      parent: mainWindow,
+      webPreferences: {
+        preload: path.join(__dirname, "preload.js"),
+      },
+    });
+  }
+  about.loadFile("./src/views/itens.html");
+}
 
 function cadastroWindow() {
   nativeTheme.themeSource = "light";
@@ -210,7 +230,6 @@ const template = [
 module.exports = { cadastroWindow };
 
 ipcMain.on("cadastrar-cliente", async (event, cadastroCliente) => {
-  //console.log(cadastroCliente);
 
   try {
     const newClient = clientModel({
