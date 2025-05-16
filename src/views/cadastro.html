@@ -19,17 +19,19 @@
         <input id="buscarCli" style="margin: -1px" class="form-control me-2" type="search" placeholder="Search"
           aria-label="Search" />
       </div>
+      <div class="form-group col-md-2">
+        <button type="button" class="btn btn-success" onclick="searchClient()" id="buscar">Buscar</button>
+      </div>
+    </div>
   </form>
-  <div class="form-group col-md-2">
-    <button class="btn btn-success" onclick="searchClient()" id="buscar">Buscar</button>
-  </div>
-  </div>
-  <hr>
+   <hr>
 
   <div>
     <section class="container">
       <!--submit ativa as validaçoes-->
       <form id="frmCadastro">
+        <label for="input id" style="display: none;">ID</label>
+              <input type="text" class="form-control" id="id" style="display: none;"/>
         <div>
           <div class="row">
             <div class="form-group col-md-6">
@@ -135,6 +137,20 @@
       <button type="reset" class="btn" onclick="resetForm()" id="btnReset"></button>
   </div>
   </section>
+        </form>
+          <button type="submit" class="btn btn-success" id="btnCreate">
+            Salvar
+          </button>
+          <button class="btn btn-warning" type="submit" id="btnUpdate" disabled>
+            Editar
+          </button>
+          <button class="btn btn-danger" type="button" id="btnDelete" onclick="removeClient()" disabled>
+            Excluir
+          </button>
+          <button type="reset" class="btn" onclick="resetForm()" id="btnReset"></button>
+        </div>
+      
+    </section>
   </div>
   <script src="rendererCadastro.js"></script>
 </body>
