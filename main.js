@@ -154,7 +154,7 @@ const template = [
     submenu: [
       {
         label: "criar cadastro (botao temporario)",
-        click: () => cadastroWindow(),
+        click: () => itensWindow(),
       },
       {
         label: "Sair",
