@@ -79,7 +79,7 @@ function cadastroWindow() {
   if (mainWindow) {
     about = new BrowserWindow({
       width: 1020,
-      height: 580,
+      height: 520,
       autoHideMenuBar: true,
       resizable: false,
       minimizable: false,
