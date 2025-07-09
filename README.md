@@ -1,10 +1,36 @@
-# Desenvolvimento profissional em JavaScript
-desenvolvimento de um cadastro de cliente usando electron e mongoDB atlas.
 
-# autor
+
+# 💡 Desenvolvimento profissional em JavaScript
+Desenvolvimento de um cadastro de cliente usando electron e mongoDB atlas.
+
+# 👨‍💻 autor
 Guilehrme Rosa Lopes
 
-# Tutorial de instalação:
-## .1
-pegar o codigo no github e clonar usando a plataforma git
-![](https://github.com/caallop/cadastro-cliente/blob/main/src/public/img/cadastro.png)
+# 💻 Pré-requisitos
+ Antes de começar, verifique se você atendeu aos seguintes requisitos:
+
+Você instalou a versão mais recente de <Node / Git / NPM>
+Apenas para: <Windows>.
+
+# 🚀 Tutorial de instalação:
+## PASSO: 1
+Pegar o codigo no github e clonar usando a plataforma git
+
+![](https://github.com/caallop/cadastro-cliente/blob/main/src/public/img/fotogit.png)
+
+## PASSO: 2
+abrir um terminal no vscode, na raiz do projeto, e utilizar o seguinte comando: 
+
+(```npm install```)
+
+
+e após a instalação:
+
+(```npm start```)
+
+e assim podera usar o aplicativo electron a sua vontade!!
+
+ # 📝 Licença
+este projeto esta sob Licença de:
+
+![](https://img.shields.io/github/license/caallop/cadastro-cliente)
