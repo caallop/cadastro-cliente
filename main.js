@@ -30,7 +30,7 @@ const { jspdf, default: jsPDF } = require("jspdf");
 //browsewindow (criaçao da janela)
 //nativeTheme (denfinir tema claro ou escuro)
 const createWindow = () => {
-  //janela principal
+  nativeTheme.themeSource = "system";
   let win;
   win = new BrowserWindow({
     //nativeTheme.themeSource = 'dark',
@@ -49,30 +49,8 @@ const createWindow = () => {
 };
 //inicializaçao da aplicaçao (assincronismo)
 
-function itensWindow() {
-  nativeTheme.themeSource = "light";
-  // Obter a janela principal
-  const mainWindow = BrowserWindow.getFocusedWindow();
-  //validação (se existir a janela principal)
-  if (mainWindow) {
-    about = new BrowserWindow({
-      width: 1020,
-      height: 580,
-      autoHideMenuBar: true,
-      resizable: false,
-      minimizable: false,
-      // Estabelecer uma relação hierarquica entre janelas
-      parent: mainWindow,
-      webPreferences: {
-        preload: path.join(__dirname, "preload.js"),
-      },
-    });
-  }
-  about.loadFile("./src/views/itens.html");
-}
-
 function cadastroWindow() {
-  nativeTheme.themeSource = "light";
+  nativeTheme.themeSource = "system";
   // Obter a janela principal
   const mainWindow = BrowserWindow.getFocusedWindow();
   //validação (se existir a janela principal)
@@ -85,6 +63,7 @@ function cadastroWindow() {
       minimizable: false,
       // Estabelecer uma relação hierarquica entre janelas
       parent: mainWindow,
+      modal: true,
       webPreferences: {
         preload: path.join(__dirname, "preload.js"),
       },
@@ -148,21 +127,6 @@ ipcMain.on("open-client", (event) => {
 
 //template do menu
 const template = [
-  {
-    label: "Criar cadastro",
-    //qnd vc clicar no notas vai aparecer aqla telinha com varias opçies
-    submenu: [
-      {
-        label: "criar cadastro (botao temporario)",
-        click: () => itensWindow(),
-      },
-      {
-        label: "Sair",
-        acelerator: "Alt+F4",
-        click: () => app.quit(),
-      },
-    ],
-  },
   {
     label: "Relatório",
     submenu: [
